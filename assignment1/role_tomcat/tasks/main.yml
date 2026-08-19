@@ -1,0 +1,51 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install Java
+  apt:
+    name: openjdk-17-jdk
+    state: present
+
+- name: Install Tomcat
+  apt:
+    name: tomcat10
+    state: present
+
+- name: Start and enable Tomcat
+  systemd:
+    name: tomcat10
+    state: started
+    enabled: true
+
+- name: Create sample application directory
+  file:
+    path: /var/lib/tomcat10/webapps/sample
+    state: directory
+    owner: tomcat
+    group: tomcat
+    mode: '0755'
+
+- name: Deploy sample application
+  copy:
+    content: |
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Sample Tomcat Application</title>
+      </head>
+      <body>
+        <h1>Tomcat Application Deployed Successfully</h1>
+        <h2>Server: {{ inventory_hostname }}</h2>
+      </body>
+      </html>
+    dest: /var/lib/tomcat10/webapps/sample/index.html
+    owner: tomcat
+    group: tomcat
+    mode: '0644'
+
+- name: Restart Tomcat
+  systemd:
+    name: tomcat10
+    state: restarted

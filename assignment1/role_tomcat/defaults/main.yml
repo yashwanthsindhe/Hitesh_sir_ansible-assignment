@@ -1,0 +1,9 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for role_tomcat
+
+java_package: openjdk-17-jdk
+tomcat_package: tomcat10
+tomcat_service: tomcat10
+tomcat_webapps: /var/lib/tomcat10/webapps
+app_name: sample
